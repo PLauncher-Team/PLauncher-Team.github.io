@@ -15,6 +15,7 @@
 
         body {
             font-family: 'Inter', system-ui, sans-serif;
+            overflow-x: hidden;
         }
 
         .title-font {
@@ -125,25 +126,41 @@
         .lang-slider {
             animation: pulse-glow 2.5s ease-in-out infinite;
         }
+
+        @media (max-width: 768px) {
+            .nav-inner {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 12px;
+            }
+            .nav-logo {
+                flex-shrink: 0;
+            }
+            .nav-actions {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 10px;
+            }
+        }
     </style>
 </head>
-<body class="bg-zinc-950 text-zinc-200 overflow-x-hidden">
+<body class="bg-zinc-950 text-zinc-200">
 <nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
-    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
-        <div class="flex items-center gap-3">
-            <div class="w-9 h-9 bg-violet-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-violet-500/50">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between nav-inner">
+        <div class="flex items-center gap-2 nav-logo">
+            <div class="w-8 h-8 bg-violet-600 rounded-2xl flex items-center justify-center text-white font-bold text-xl shadow-lg shadow-violet-500/50">
                 P
             </div>
-            <span class="title-font text-2xl font-semibold tracking-tighter">PLauncher</span>
+            <span class="title-font text-xl font-semibold tracking-tighter">PLauncher</span>
         </div>
 
-        <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+        <div class="hidden md:flex items-center gap-6 text-sm font-medium">
             <a href="#features" class="nav-link" data-i18n="nav.features">Возможности</a>
             <a href="#download" class="nav-link" data-i18n="nav.download">Скачать</a>
             <a href="#faq" class="nav-link" data-i18n="nav.faq">FAQ</a>
         </div>
 
-        <div class="flex items-center gap-4">
+        <div class="flex items-center gap-3 nav-actions">
             <div class="lang-widget">
                 <div class="lang-slider" id="langSlider"></div>
                 <span class="lang-option active" data-lang="ru" onclick="setLanguage('ru')">RU</span>
@@ -151,12 +168,12 @@
             </div>
             <a href="https://github.com/PLauncher-Team/PLauncher"
                target="_blank"
-               class="flex items-center gap-2 px-5 py-2.5 rounded-2xl border border-white/20 hover:border-white/40 transition-colors text-sm font-medium">
+               class="hidden sm:flex items-center gap-2 px-4 py-2 rounded-2xl border border-white/20 hover:border-white/40 transition-colors text-sm font-medium">
                 <i class="fab fa-github"></i>
                 <span data-i18n="nav.source">Исходный код</span>
             </a>
             <a href="#download"
-               class="flex items-center gap-2 bg-white text-zinc-900 px-6 py-2.5 rounded-2xl font-semibold hover:bg-violet-100 transition-all active:scale-95">
+               class="flex items-center gap-2 bg-white text-zinc-900 px-5 py-2 rounded-2xl font-semibold hover:bg-violet-100 transition-all active:scale-95 text-sm">
                 <i class="fas fa-download"></i>
                 <span data-i18n="nav.downloadBtn">Скачать</span>
             </a>
@@ -164,38 +181,38 @@
     </div>
 </nav>
 
-<section class="minecraft-bg min-h-screen flex items-center pt-20">
-    <div class="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-16 items-center">
-        <div class="space-y-8">
+<section class="minecraft-bg min-h-screen flex items-center pt-24 pb-16">
+    <div class="max-w-7xl mx-auto px-4 py-10 grid md:grid-cols-2 gap-10 items-center">
+        <div class="space-y-6 text-center md:text-left">
             <div class="inline-flex items-center gap-2 px-4 py-2 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 text-sm">
                 <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
                 <span data-i18n="hero.badge">Быстрый • Лёгкий • Мощный</span>
             </div>
 
-            <h1 class="text-6xl md:text-7xl font-bold title-font tracking-tighter leading-none">
+            <h1 class="text-5xl sm:text-6xl md:text-7xl font-bold title-font tracking-tighter leading-none">
                 <span data-i18n="hero.title1">Minecraft</span><br><span data-i18n="hero.title2">по-новому</span>
             </h1>
 
-            <p class="text-xl text-zinc-400 max-w-lg" data-i18n="hero.description">
+            <p class="text-lg text-zinc-400 max-w-lg mx-auto md:mx-0" data-i18n="hero.description">
                 Современный Python-лаунчер с поддержкой модов, мультипрофилей и Ely.by.
                 Запускается за &lt;3 секунды и потребляет минимум ресурсов.
             </p>
 
-            <div class="flex flex-wrap gap-4">
+            <div class="flex flex-wrap justify-center md:justify-start gap-3">
                 <a href="#download"
-                   class="flex-1 md:flex-none bg-violet-600 hover:bg-violet-500 transition-all px-8 py-4 rounded-3xl font-semibold text-lg flex items-center justify-center gap-3 shadow-xl shadow-violet-500/30">
+                   class="w-full sm:w-auto bg-violet-600 hover:bg-violet-500 transition-all px-6 py-3 rounded-3xl font-semibold text-lg flex items-center justify-center gap-3 shadow-xl shadow-violet-500/30">
                     <i class="fas fa-download"></i>
                     <span data-i18n="hero.downloadWindows">Скачать для Windows</span>
                 </a>
 
                 <a href="https://github.com/PLauncher-Team/PLauncher" target="_blank"
-                   class="flex-1 md:flex-none border border-white/30 hover:border-white/60 transition-all px-8 py-4 rounded-3xl font-medium flex items-center justify-center gap-3">
+                   class="w-full sm:w-auto border border-white/30 hover:border-white/60 transition-all px-6 py-3 rounded-3xl font-medium flex items-center justify-center gap-3">
                     <i class="fab fa-github"></i>
                     GitHub
                 </a>
             </div>
 
-            <div class="flex items-center gap-8 text-sm pt-4">
+            <div class="flex flex-wrap justify-center md:justify-start items-center gap-6 text-sm pt-4">
                 <div>
                     <span class="block text-emerald-400 text-2xl font-semibold">100 МБ</span>
                     <span class="text-zinc-500" data-i18n="hero.ram">потребление RAM</span>
@@ -228,57 +245,57 @@
         </div>
     </div>
 
-    <div class="absolute bottom-10 left-1/2 flex flex-col items-center gap-2 text-zinc-400 cursor-pointer hover:text-white transition-colors duration-300" onclick="document.querySelector('#features').scrollIntoView({behavior: 'smooth'})">
+    <div class="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-zinc-400 cursor-pointer hover:text-white transition-colors duration-300 z-10" onclick="document.querySelector('#features').scrollIntoView({behavior: 'smooth'})">
         <div class="text-xs tracking-widest" data-i18n="hero.scroll">ПРОКРУТИТЬ</div>
         <i class="fas fa-chevron-down animate-bounce"></i>
     </div>
 </section>
 
-<section id="features" class="py-24 bg-zinc-950">
-    <div class="max-w-7xl mx-auto px-6">
-        <div class="text-center mb-16">
+<section id="features" class="py-20 bg-zinc-950">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12">
             <span class="px-4 py-2 bg-white/5 rounded-full text-violet-400 text-sm font-medium" data-i18n="features.badge">МОЩНЫЕ ВОЗМОЖНОСТИ</span>
-            <h2 class="text-5xl font-bold title-font mt-4" data-i18n="features.title">Всё, что нужно для Minecraft</h2>
+            <h2 class="text-4xl sm:text-5xl font-bold title-font mt-4" data-i18n="features.title">Всё, что нужно для Minecraft</h2>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-8">
-            <div class="feature-card glass rounded-3xl p-8">
-                <div class="w-14 h-14 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-2xl flex items-center justify-center text-3xl mb-6">
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="feature-card glass rounded-3xl p-6">
+                <div class="w-12 h-12 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-2xl flex items-center justify-center text-2xl mb-4">
                     📦
                 </div>
-                <h3 class="text-2xl font-semibold mb-3" data-i18n="features.card1.title">Мультипрофили</h3>
-                <p class="text-zinc-400" data-i18n="features.card1.desc">Полностью изолированные профили с отдельными версиями, модами и настройками.</p>
-                <ul class="mt-6 space-y-3 text-sm">
+                <h3 class="text-xl font-semibold mb-2" data-i18n="features.card1.title">Мультипрофили</h3>
+                <p class="text-zinc-400 text-sm" data-i18n="features.card1.desc">Полностью изолированные профили с отдельными версиями, модами и настройками.</p>
+                <ul class="mt-4 space-y-2 text-sm">
                     <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> <span data-i18n="features.card1.item1">Forge, Fabric, Quilt, NeoForge</span></li>
                     <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> <span data-i18n="features.card1.item2">OptiFine и Cleanroom</span></li>
                     <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> <span data-i18n="features.card1.item3">Автоматическое управление Java</span></li>
                 </ul>
             </div>
 
-            <div class="feature-card glass rounded-3xl p-8">
-                <div class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-teal-500 rounded-2xl flex items-center justify-center text-3xl mb-6">
+            <div class="feature-card glass rounded-3xl p-6">
+                <div class="w-12 h-12 bg-gradient-to-br from-cyan-500 to-teal-500 rounded-2xl flex items-center justify-center text-2xl mb-4">
                     ⚡
                 </div>
-                <h3 class="text-2xl font-semibold mb-3" data-i18n="features.card2.title">Скорость и лёгкость</h3>
-                <p class="text-zinc-400" data-i18n="features.card2.desc">Один из самых быстрых и экономичных лаунчеров. Запуск за секунды и минимальное потребление ресурсов.</p>
-                <div class="mt-8 p-4 bg-black/40 rounded-2xl text-center">
-                    <div class="text-emerald-400 text-4xl font-mono font-bold">100 МБ</div>
+                <h3 class="text-xl font-semibold mb-2" data-i18n="features.card2.title">Скорость и лёгкость</h3>
+                <p class="text-zinc-400 text-sm" data-i18n="features.card2.desc">Один из самых быстрых и экономичных лаунчеров. Запуск за секунды и минимальное потребление ресурсов.</p>
+                <div class="mt-6 p-4 bg-black/40 rounded-2xl text-center">
+                    <div class="text-emerald-400 text-3xl font-mono font-bold">100 МБ</div>
                     <div class="text-xs text-zinc-500" data-i18n="features.card2.ram">максимум RAM</div>
                 </div>
             </div>
 
-            <div class="feature-card glass rounded-3xl p-8">
-                <div class="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center text-3xl mb-6">
+            <div class="feature-card glass rounded-3xl p-6">
+                <div class="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center text-2xl mb-4">
                     🌍
                 </div>
-                <h3 class="text-2xl font-semibold mb-3" data-i18n="features.card3.title">Многоязычный + Ely.by</h3>
-                <p class="text-zinc-400" data-i18n="features.card3.desc">Поддержка русского, английского, испанского и украинского. Полное управление скинами через Ely.by.</p>
-                <div class="mt-8 flex gap-4">
-                    <div class="flex-1 bg-white/5 rounded-2xl p-4 text-center">
+                <h3 class="text-xl font-semibold mb-2" data-i18n="features.card3.title">Многоязычный + Ely.by</h3>
+                <p class="text-zinc-400 text-sm" data-i18n="features.card3.desc">Поддержка русского, английского, испанского и украинского. Полное управление скинами через Ely.by.</p>
+                <div class="mt-6 flex gap-3">
+                    <div class="flex-1 bg-white/5 rounded-2xl p-3 text-center">
                         <div class="text-xl">🇷🇺</div>
                         <div class="text-xs mt-1">Русский</div>
                     </div>
-                    <div class="flex-1 bg-white/5 rounded-2xl p-4 text-center">
+                    <div class="flex-1 bg-white/5 rounded-2xl p-3 text-center">
                         <div class="text-xl">🇬🇧</div>
                         <div class="text-xs mt-1">English</div>
                     </div>
@@ -288,75 +305,75 @@
     </div>
 </section>
 
-<section id="download" class="py-24 bg-gradient-to-b from-zinc-950 to-black relative overflow-hidden">
-    <div class="max-w-4xl mx-auto px-6 text-center">
-        <div class="glass inline-flex flex-col items-center px-12 py-16 rounded-3xl border border-violet-500/20">
-            <h2 class="text-5xl title-font font-bold mb-4" data-i18n="download.title">Готовы запускать?</h2>
-            <p class="text-zinc-400 text-lg mb-10 max-w-md" data-i18n="download.desc">Скачайте последнюю версию PLauncher и начните играть по-новому</p>
+<section id="download" class="py-20 bg-gradient-to-b from-zinc-950 to-black relative overflow-hidden">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+        <div class="glass inline-flex flex-col items-center px-6 py-12 rounded-3xl border border-violet-500/20 w-full max-w-lg mx-auto">
+            <h2 class="text-4xl sm:text-5xl title-font font-bold mb-4" data-i18n="download.title">Готовы запускать?</h2>
+            <p class="text-zinc-400 text-lg mb-8 max-w-md" data-i18n="download.desc">Скачайте последнюю версию PLauncher и начните играть по-новому</p>
 
             <a href="https://github.com/PLauncher-Team/PLauncher/releases/latest"
                target="_blank"
-               class="group relative inline-flex items-center gap-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-12 py-6 rounded-3xl text-2xl font-semibold overflow-hidden hover:scale-105 transition-all duration-300">
-                    <span class="relative z-10 flex items-center gap-4">
-                        <i class="fas fa-download text-3xl"></i>
+               class="group relative inline-flex items-center gap-3 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-8 py-4 rounded-3xl text-xl font-semibold overflow-hidden hover:scale-105 transition-all duration-300 w-full sm:w-auto justify-center">
+                    <span class="relative z-10 flex items-center gap-3">
+                        <i class="fas fa-download text-2xl"></i>
                         <span data-i18n="download.button">Скачать установщик</span>
                     </span>
                 <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"></div>
             </a>
 
-            <div class="mt-8 flex items-center gap-8 text-sm text-zinc-400">
+            <div class="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-zinc-400">
                 <div class="flex items-center gap-2">
                     <i class="fas fa-windows"></i>
                     Windows 10+
                 </div>
-                <div>•</div>
+                <div class="hidden sm:block">•</div>
                 <div>~30 МБ</div>
             </div>
         </div>
     </div>
 </section>
 
-<section id="faq" class="py-24 bg-zinc-950">
-    <div class="max-w-3xl mx-auto px-6">
-        <h2 class="text-5xl font-bold title-font text-center mb-16" data-i18n="faq.title">Часто задаваемые вопросы</h2>
+<section id="faq" class="py-20 bg-zinc-950">
+    <div class="max-w-3xl mx-auto px-4">
+        <h2 class="text-4xl sm:text-5xl font-bold title-font text-center mb-12" data-i18n="faq.title">Часто задаваемые вопросы</h2>
 
-        <div class="space-y-4">
+        <div class="space-y-3">
             <details class="glass rounded-3xl group">
-                <summary class="px-8 py-6 text-lg font-medium cursor-pointer flex items-center justify-between">
+                <summary class="px-6 py-5 text-base font-medium cursor-pointer flex items-center justify-between">
                     <span data-i18n="faq.q1">Поддерживает ли PLauncher моды?</span>
                     <span class="text-violet-400 group-open:rotate-180 transition-transform">↓</span>
                 </summary>
-                <div class="px-8 pb-8 text-zinc-400 border-t border-white/10 pt-4" data-i18n="faq.a1">
+                <div class="px-6 pb-6 text-zinc-400 border-t border-white/10 pt-4 text-sm" data-i18n="faq.a1">
                     Да! Полная поддержка Forge, Fabric, Quilt, NeoForge, OptiFine и Cleanroom. Устанавливайте моды в один клик.
                 </div>
             </details>
 
             <details class="glass rounded-3xl group">
-                <summary class="px-8 py-6 text-lg font-medium cursor-pointer flex items-center justify-between">
+                <summary class="px-6 py-5 text-base font-medium cursor-pointer flex items-center justify-between">
                     <span data-i18n="faq.q2">Можно ли играть оффлайн?</span>
                     <span class="text-violet-400 group-open:rotate-180 transition-transform">↓</span>
                 </summary>
-                <div class="px-8 pb-8 text-zinc-400 border-t border-white/10 pt-4" data-i18n="faq.a2">
+                <div class="px-6 pb-6 text-zinc-400 border-t border-white/10 pt-4 text-sm" data-i18n="faq.a2">
                     Конечно. PLauncher поддерживает оффлайн-запуск без подключения к интернету.
                 </div>
             </details>
 
             <details class="glass rounded-3xl group">
-                <summary class="px-8 py-6 text-lg font-medium cursor-pointer flex items-center justify-between">
+                <summary class="px-6 py-5 text-base font-medium cursor-pointer flex items-center justify-between">
                     <span data-i18n="faq.q3">Работает ли с Ely.by?</span>
                     <span class="text-violet-400 group-open:rotate-180 transition-transform">↓</span>
                 </summary>
-                <div class="px-8 pb-8 text-zinc-400 border-t border-white/10 pt-4" data-i18n="faq.a3">
+                <div class="px-6 pb-6 text-zinc-400 border-t border-white/10 pt-4 text-sm" data-i18n="faq.a3">
                     Полностью. Вы можете загружать, просматривать и менять скины прямо в лаунчере.
                 </div>
             </details>
 
             <details class="glass rounded-3xl group">
-                <summary class="px-8 py-6 text-lg font-medium cursor-pointer flex items-center justify-between">
+                <summary class="px-6 py-5 text-base font-medium cursor-pointer flex items-center justify-between">
                     <span data-i18n="faq.q4">Это открытый проект?</span>
                     <span class="text-violet-400 group-open:rotate-180 transition-transform">↓</span>
                 </summary>
-                <div class="px-8 pb-8 text-zinc-400 border-t border-white/10 pt-4" data-i18n="faq.a4">
+                <div class="px-6 pb-6 text-zinc-400 border-t border-white/10 pt-4 text-sm" data-i18n="faq.a4">
                     Да. Полностью открытый исходный код под лицензией GPL-3.0. Присоединяйтесь к разработке на GitHub.
                 </div>
             </details>
@@ -364,35 +381,35 @@
     </div>
 </section>
 
-<footer class="bg-black border-t border-white/10 py-16">
-    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12">
+<footer class="bg-black border-t border-white/10 py-12">
+    <div class="max-w-7xl mx-auto px-4 grid md:grid-cols-3 gap-8">
         <div>
-            <div class="flex items-center gap-3 mb-6">
-                <div class="w-8 h-8 bg-violet-600 rounded-2xl flex items-center justify-center text-white font-bold">P</div>
-                <span class="title-font text-2xl font-semibold">PLauncher</span>
+            <div class="flex items-center gap-2 mb-4">
+                <div class="w-7 h-7 bg-violet-600 rounded-2xl flex items-center justify-center text-white font-bold">P</div>
+                <span class="title-font text-xl font-semibold">PLauncher</span>
             </div>
             <p class="text-zinc-500 text-sm" data-i18n="footer.desc">Быстрый и удобный лаунчер для Minecraft.</p>
         </div>
 
-        <div class="md:col-span-2 grid grid-cols-3 gap-8 text-sm">
+        <div class="md:col-span-2 grid grid-cols-3 gap-6 text-sm">
             <div>
-                <div class="font-medium mb-4 text-white" data-i18n="footer.product">Продукт</div>
-                <a href="#features" class="block text-zinc-400 hover:text-white mb-2" data-i18n="nav.features">Возможности</a>
-                <a href="#download" class="block text-zinc-400 hover:text-white mb-2" data-i18n="nav.download">Скачать</a>
+                <div class="font-medium mb-3 text-white" data-i18n="footer.product">Продукт</div>
+                <a href="#features" class="block text-zinc-400 hover:text-white mb-1.5" data-i18n="nav.features">Возможности</a>
+                <a href="#download" class="block text-zinc-400 hover:text-white mb-1.5" data-i18n="nav.download">Скачать</a>
             </div>
             <div>
-                <div class="font-medium mb-4 text-white" data-i18n="footer.community">Сообщество</div>
-                <a href="https://github.com/PLauncher-Team/PLauncher" target="_blank" class="block text-zinc-400 hover:text-white mb-2">GitHub</a>
-                <a href="https://github.com/PLauncher-Team/PLauncher/releases" target="_blank" class="block text-zinc-400 hover:text-white mb-2" data-i18n="footer.releases">Релизы</a>
+                <div class="font-medium mb-3 text-white" data-i18n="footer.community">Сообщество</div>
+                <a href="https://github.com/PLauncher-Team/PLauncher" target="_blank" class="block text-zinc-400 hover:text-white mb-1.5">GitHub</a>
+                <a href="https://github.com/PLauncher-Team/PLauncher/releases" target="_blank" class="block text-zinc-400 hover:text-white mb-1.5" data-i18n="footer.releases">Релизы</a>
             </div>
             <div>
-                <div class="font-medium mb-4 text-white" data-i18n="footer.legal">Юридическое</div>
+                <div class="font-medium mb-3 text-white" data-i18n="footer.legal">Юридическое</div>
                 <a href="https://github.com/PLauncher-Team/PLauncher/blob/main/LICENSE" target="_blank" class="block text-zinc-400 hover:text-white" data-i18n="footer.license">Лицензия GPL-3.0</a>
             </div>
         </div>
     </div>
 
-    <div class="text-center text-zinc-500 text-xs mt-20" data-i18n="footer.disclaimer">
+    <div class="text-center text-zinc-500 text-xs mt-12 px-4" data-i18n="footer.disclaimer">
         PLauncher не связан с Mojang или Microsoft. Minecraft® — торговая марка Mojang Studios.
     </div>
 </footer>
