@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PLauncher — Современный лаунчер Minecraft</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+        :root {
+            --primary: 139 92 246;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+        }
+
+        .title-font {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .hero-bg {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%);
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .gradient-text {
+            background: linear-gradient(90deg, #a5b4fc, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .feature-card {
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-12px) scale(1.03);
+            box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.4);
+        }
+
+        .nav-link {
+            position: relative;
+        }
+
+        .nav-link:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background: linear-gradient(to right, rgb(139 92 246), rgb(192 132 252));
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover:after {
+            width: 100%;
+        }
+
+        .minecraft-bg {
+            background-image:
+                    linear-gradient(rgba(15, 15, 35, 0.85), rgba(15, 15, 35, 0.95)),
+                    url('https://i.pinimg.com/originals/51/c9/de/51c9de1f883159047ae82628dd33fb6a.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .lang-widget {
+            position: relative;
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 9999px;
+            padding: 3px;
+            display: flex;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+        }
+
+        .lang-option {
+            position: relative;
+            z-index: 1;
+            padding: 8px 18px;
+            border-radius: 9999px;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.35s ease;
+            color: rgba(255, 255, 255, 0.45);
+            letter-spacing: 0.3px;
+            user-select: none;
+        }
+
+        .lang-option.active {
+            color: #fff;
+        }
+
+        .lang-slider {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: calc(50% - 3px);
+            height: calc(100% - 6px);
+            background: linear-gradient(135deg, #8b5cf6, #a78bfa);
+            border-radius: 9999px;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        .lang-slider.right {
+            transform: translateX(100%);
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4); }
+            50% { box-shadow: 0 4px 25px rgba(139, 92, 246, 0.7); }
+        }
+
+        .lang-slider {
+            animation: pulse-glow 2.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-200 overflow-x-hidden">
+<nav class="fixed top-0 left-0 right-0 z-50 glass border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-9 h-9 bg-violet-600 rounded-2xl flex items-center justify-center text-white font-bold text-2xl shadow-lg shadow-violet-500/50">
+                P
+            </div>
+            <span class="title-font text-2xl font-semibold tracking-tighter">PLauncher</span>
+        </div>
+
+        <div class="hidden md:flex items-center gap-8 text-sm font-medium">
+            <a href="#features" class="nav-link" data-i18n="nav.features">Возможности</a>
+            <a href="#download" class="nav-link" data-i18n="nav.download">Скачать</a>
+            <a href="#faq" class="nav-link" data-i18n="nav.faq">FAQ</a>
+        </div>
+
+        <div class="flex items-center gap-4">
+            <div class="lang-widget">
+                <div class="lang-slider" id="langSlider"></div>
+                <span class="lang-option active" data-lang="ru" onclick="setLanguage('ru')">RU</span>
+                <span class="lang-option" data-lang="en" onclick="setLanguage('en')">EN</span>
+            </div>
+            <a href="https://github.com/PLauncher-Team/PLauncher"
+               target="_blank"
+               class="flex items-center gap-2 px-5 py-2.5 rounded-2xl border border-white/20 hover:border-white/40 transition-colors text-sm font-medium">
+                <i class="fab fa-github"></i>
+                <span data-i18n="nav.source">Исходный код</span>
+            </a>
+            <a href="#download"
+               class="flex items-center gap-2 bg-white text-zinc-900 px-6 py-2.5 rounded-2xl font-semibold hover:bg-violet-100 transition-all active:scale-95">
+                <i class="fas fa-download"></i>
+                <span data-i18n="nav.downloadBtn">Скачать</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<section class="minecraft-bg min-h-screen flex items-center pt-20">
+    <div class="max-w-7xl mx-auto px-6 py-24 grid md:grid-cols-2 gap-16 items-center">
+        <div class="space-y-8">
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 text-sm">
+                <div class="w-2 h-2 bg-emerald-400 rounded-full animate-pulse"></div>
+                <span data-i18n="hero.badge">Быстрый • Лёгкий • Мощный</span>
+            </div>
+
+            <h1 class="text-6xl md:text-7xl font-bold title-font tracking-tighter leading-none">
+                <span data-i18n="hero.title1">Minecraft</span><br><span data-i18n="hero.title2">по-новому</span>
+            </h1>
+
+            <p class="text-xl text-zinc-400 max-w-lg" data-i18n="hero.description">
+                Современный Python-лаунчер с поддержкой модов, мультипрофилей и Ely.by.
+                Запускается за &lt;3 секунды и потребляет минимум ресурсов.
+            </p>
+
+            <div class="flex flex-wrap gap-4">
+                <a href="#download"
+                   class="flex-1 md:flex-none bg-violet-600 hover:bg-violet-500 transition-all px-8 py-4 rounded-3xl font-semibold text-lg flex items-center justify-center gap-3 shadow-xl shadow-violet-500/30">
+                    <i class="fas fa-download"></i>
+                    <span data-i18n="hero.downloadWindows">Скачать для Windows</span>
+                </a>
+
+                <a href="https://github.com/PLauncher-Team/PLauncher" target="_blank"
+                   class="flex-1 md:flex-none border border-white/30 hover:border-white/60 transition-all px-8 py-4 rounded-3xl font-medium flex items-center justify-center gap-3">
+                    <i class="fab fa-github"></i>
+                    GitHub
+                </a>
+            </div>
+
+            <div class="flex items-center gap-8 text-sm pt-4">
+                <div>
+                    <span class="block text-emerald-400 text-2xl font-semibold">100 МБ</span>
+                    <span class="text-zinc-500" data-i18n="hero.ram">потребление RAM</span>
+                </div>
+                <div>
+                    <span class="block text-emerald-400 text-2xl font-semibold">&lt;3с</span>
+                    <span class="text-zinc-500" data-i18n="hero.launchTime">время запуска</span>
+                </div>
+                <div>
+                    <span class="block text-emerald-400 text-2xl font-semibold">30 МБ</span>
+                    <span class="text-zinc-500" data-i18n="hero.installerSize">размер установщика</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative hidden md:block">
+            <div class="glass rounded-3xl p-2 shadow-2xl">
+                <img src="img.png"
+                     alt="PLauncher интерфейс"
+                     class="rounded-2xl shadow-inner w-full">
+            </div>
+
+            <div class="absolute -top-6 -right-6 glass px-6 py-3 rounded-2xl text-sm flex items-center gap-3 shadow-xl">
+                <i class="fas fa-bolt text-amber-400"></i>
+                <div>
+                    <div class="font-medium" data-i18n="hero.instantLaunch">Мгновенный запуск</div>
+                    <div class="text-zinc-400 text-xs">Nuitka + Python</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="absolute bottom-10 left-1/2 flex flex-col items-center gap-2 text-zinc-400 cursor-pointer hover:text-white transition-colors duration-300" onclick="document.querySelector('#features').scrollIntoView({behavior: 'smooth'})">
+        <div class="text-xs tracking-widest" data-i18n="hero.scroll">ПРОКРУТИТЬ</div>
+        <i class="fas fa-chevron-down animate-bounce"></i>
+    </div>
+</section>
+
+<section id="features" class="py-24 bg-zinc-950">
+    <div class="max-w-7xl mx-auto px-6">
+        <div class="text-center mb-16">
+            <span class="px-4 py-2 bg-white/5 rounded-full text-violet-400 text-sm font-medium" data-i18n="features.badge">МОЩНЫЕ ВОЗМОЖНОСТИ</span>
+            <h2 class="text-5xl font-bold title-font mt-4" data-i18n="features.title">Всё, что нужно для Minecraft</h2>
+        </div>
+
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="feature-card glass rounded-3xl p-8">
+                <div class="w-14 h-14 bg-gradient-to-br from-violet-500 to-fuchsia-500 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                    📦
+                </div>
+                <h3 class="text-2xl font-semibold mb-3" data-i18n="features.card1.title">Мультипрофили</h3>
+                <p class="text-zinc-400" data-i18n="features.card1.desc">Полностью изолированные профили с отдельными версиями, модами и настройками.</p>
+                <ul class="mt-6 space-y-3 text-sm">
+                    <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> <span data-i18n="features.card1.item1">Forge, Fabric, Quilt, NeoForge</span></li>
+                    <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> <span data-i18n="features.card1.item2">OptiFine и Cleanroom</span></li>
+                    <li class="flex items-center gap-2"><i class="fas fa-check text-emerald-400"></i> <span data-i18n="features.card1.item3">Автоматическое управление Java</span></li>
+                </ul>
+            </div>
+
+            <div class="feature-card glass rounded-3xl p-8">
+                <div class="w-14 h-14 bg-gradient-to-br from-cyan-500 to-teal-500 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                    ⚡
+                </div>
+                <h3 class="text-2xl font-semibold mb-3" data-i18n="features.card2.title">Скорость и лёгкость</h3>
+                <p class="text-zinc-400" data-i18n="features.card2.desc">Один из самых быстрых и экономичных лаунчеров. Запуск за секунды и минимальное потребление ресурсов.</p>
+                <div class="mt-8 p-4 bg-black/40 rounded-2xl text-center">
+                    <div class="text-emerald-400 text-4xl font-mono font-bold">100 МБ</div>
+                    <div class="text-xs text-zinc-500" data-i18n="features.card2.ram">максимум RAM</div>
+                </div>
+            </div>
+
+            <div class="feature-card glass rounded-3xl p-8">
+                <div class="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center text-3xl mb-6">
+                    🌍
+                </div>
+                <h3 class="text-2xl font-semibold mb-3" data-i18n="features.card3.title">Многоязычный + Ely.by</h3>
+                <p class="text-zinc-400" data-i18n="features.card3.desc">Поддержка русского, английского, испанского и украинского. Полное управление скинами через Ely.by.</p>
+                <div class="mt-8 flex gap-4">
+                    <div class="flex-1 bg-white/5 rounded-2xl p-4 text-center">
+                        <div class="text-xl">🇷🇺</div>
+                        <div class="text-xs mt-1">Русский</div>
+                    </div>
+                    <div class="flex-1 bg-white/5 rounded-2xl p-4 text-center">
+                        <div class="text-xl">🇬🇧</div>
+                        <div class="text-xs mt-1">English</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="download" class="py-24 bg-gradient-to-b from-zinc-950 to-black relative overflow-hidden">
+    <div class="max-w-4xl mx-auto px-6 text-center">
+        <div class="glass inline-flex flex-col items-center px-12 py-16 rounded-3xl border border-violet-500/20">
+            <h2 class="text-5xl title-font font-bold mb-4" data-i18n="download.title">Готовы запускать?</h2>
+            <p class="text-zinc-400 text-lg mb-10 max-w-md" data-i18n="download.desc">Скачайте последнюю версию PLauncher и начните играть по-новому</p>
+
+            <a href="https://github.com/PLauncher-Team/PLauncher/releases/latest"
+               target="_blank"
+               class="group relative inline-flex items-center gap-4 bg-gradient-to-r from-violet-600 to-fuchsia-600 text-white px-12 py-6 rounded-3xl text-2xl font-semibold overflow-hidden hover:scale-105 transition-all duration-300">
+                    <span class="relative z-10 flex items-center gap-4">
+                        <i class="fas fa-download text-3xl"></i>
+                        <span data-i18n="download.button">Скачать установщик</span>
+                    </span>
+                <div class="absolute inset-0 bg-white/20 translate-y-full group-hover:translate-y-0 transition-transform"></div>
+            </a>
+
+            <div class="mt-8 flex items-center gap-8 text-sm text-zinc-400">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-windows"></i>
+                    Windows 10+
+                </div>
+                <div>•</div>
+                <div>~30 МБ</div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="faq" class="py-24 bg-zinc-950">
+    <div class="max-w-3xl mx-auto px-6">
+        <h2 class="text-5xl font-bold title-font text-center mb-16" data-i18n="faq.title">Часто задаваемые вопросы</h2>
+
+        <div class="space-y-4">
+            <details class="glass rounded-3xl group">
+                <summary class="px-8 py-6 text-lg font-medium cursor-pointer flex items-center justify-between">
+                    <span data-i18n="faq.q1">Поддерживает ли PLauncher моды?</span>
+                    <span class="text-violet-400 group-open:rotate-180 transition-transform">↓</span>
+                </summary>
+                <div class="px-8 pb-8 text-zinc-400 border-t border-white/10 pt-4" data-i18n="faq.a1">
+                    Да! Полная поддержка Forge, Fabric, Quilt, NeoForge, OptiFine и Cleanroom. Устанавливайте моды в один клик.
+                </div>
+            </details>
+
+            <details class="glass rounded-3xl group">
+                <summary class="px-8 py-6 text-lg font-medium cursor-pointer flex items-center justify-between">
+                    <span data-i18n="faq.q2">Можно ли играть оффлайн?</span>
+                    <span class="text-violet-400 group-open:rotate-180 transition-transform">↓</span>
+                </summary>
+                <div class="px-8 pb-8 text-zinc-400 border-t border-white/10 pt-4" data-i18n="faq.a2">
+                    Конечно. PLauncher поддерживает оффлайн-запуск без подключения к интернету.
+                </div>
+            </details>
+
+            <details class="glass rounded-3xl group">
+                <summary class="px-8 py-6 text-lg font-medium cursor-pointer flex items-center justify-between">
+                    <span data-i18n="faq.q3">Работает ли с Ely.by?</span>
+                    <span class="text-violet-400 group-open:rotate-180 transition-transform">↓</span>
+                </summary>
+                <div class="px-8 pb-8 text-zinc-400 border-t border-white/10 pt-4" data-i18n="faq.a3">
+                    Полностью. Вы можете загружать, просматривать и менять скины прямо в лаунчере.
+                </div>
+            </details>
+
+            <details class="glass rounded-3xl group">
+                <summary class="px-8 py-6 text-lg font-medium cursor-pointer flex items-center justify-between">
+                    <span data-i18n="faq.q4">Это открытый проект?</span>
+                    <span class="text-violet-400 group-open:rotate-180 transition-transform">↓</span>
+                </summary>
+                <div class="px-8 pb-8 text-zinc-400 border-t border-white/10 pt-4" data-i18n="faq.a4">
+                    Да. Полностью открытый исходный код под лицензией GPL-3.0. Присоединяйтесь к разработке на GitHub.
+                </div>
+            </details>
+        </div>
+    </div>
+</section>
+
+<footer class="bg-black border-t border-white/10 py-16">
+    <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-3 gap-12">
+        <div>
+            <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 bg-violet-600 rounded-2xl flex items-center justify-center text-white font-bold">P</div>
+                <span class="title-font text-2xl font-semibold">PLauncher</span>
+            </div>
+            <p class="text-zinc-500 text-sm" data-i18n="footer.desc">Быстрый и удобный лаунчер для Minecraft.</p>
+        </div>
+
+        <div class="md:col-span-2 grid grid-cols-3 gap-8 text-sm">
+            <div>
+                <div class="font-medium mb-4 text-white" data-i18n="footer.product">Продукт</div>
+                <a href="#features" class="block text-zinc-400 hover:text-white mb-2" data-i18n="nav.features">Возможности</a>
+                <a href="#download" class="block text-zinc-400 hover:text-white mb-2" data-i18n="nav.download">Скачать</a>
+            </div>
+            <div>
+                <div class="font-medium mb-4 text-white" data-i18n="footer.community">Сообщество</div>
+                <a href="https://github.com/PLauncher-Team/PLauncher" target="_blank" class="block text-zinc-400 hover:text-white mb-2">GitHub</a>
+                <a href="https://github.com/PLauncher-Team/PLauncher/releases" target="_blank" class="block text-zinc-400 hover:text-white mb-2" data-i18n="footer.releases">Релизы</a>
+            </div>
+            <div>
+                <div class="font-medium mb-4 text-white" data-i18n="footer.legal">Юридическое</div>
+                <a href="https://github.com/PLauncher-Team/PLauncher/blob/main/LICENSE" target="_blank" class="block text-zinc-400 hover:text-white" data-i18n="footer.license">Лицензия GPL-3.0</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="text-center text-zinc-500 text-xs mt-20" data-i18n="footer.disclaimer">
+        PLauncher не связан с Mojang или Microsoft. Minecraft® — торговая марка Mojang Studios.
+    </div>
+</footer>
+
+<script>
+    const translations = {
+        ru: {
+            "nav.features": "Возможности",
+            "nav.download": "Скачать",
+            "nav.faq": "FAQ",
+            "nav.source": "Исходный код",
+            "nav.downloadBtn": "Скачать",
+            "hero.badge": "Быстрый • Лёгкий • Мощный",
+            "hero.title1": "Minecraft",
+            "hero.title2": "по-новому",
+            "hero.description": "Современный Python-лаунчер с поддержкой модов, мультипрофилей и Ely.by. Запускается за <3 секунды и потребляет минимум ресурсов.",
+            "hero.downloadWindows": "Скачать для Windows",
+            "hero.ram": "потребление RAM",
+            "hero.launchTime": "время запуска",
+            "hero.installerSize": "размер установщика",
+            "hero.instantLaunch": "Мгновенный запуск",
+            "hero.scroll": "ПРОКРУТИТЬ",
+            "features.badge": "МОЩНЫЕ ВОЗМОЖНОСТИ",
+            "features.title": "Всё, что нужно для Minecraft",
+            "features.card1.title": "Мультипрофили",
+            "features.card1.desc": "Полностью изолированные профили с отдельными версиями, модами и настройками.",
+            "features.card1.item1": "Forge, Fabric, Quilt, NeoForge",
+            "features.card1.item2": "OptiFine и Cleanroom",
+            "features.card1.item3": "Автоматическое управление Java",
+            "features.card2.title": "Скорость и лёгкость",
+            "features.card2.desc": "Один из самых быстрых и экономичных лаунчеров. Запуск за секунды и минимальное потребление ресурсов.",
+            "features.card2.ram": "максимум RAM",
+            "features.card3.title": "Многоязычный + Ely.by",
+            "features.card3.desc": "Поддержка русского, английского, испанского и украинского. Полное управление скинами через Ely.by.",
+            "download.title": "Готовы запускать?",
+            "download.desc": "Скачайте последнюю версию PLauncher и начните играть по-новому",
+            "download.button": "Скачать установщик",
+            "faq.title": "Часто задаваемые вопросы",
+            "faq.q1": "Поддерживает ли PLauncher моды?",
+            "faq.a1": "Да! Полная поддержка Forge, Fabric, Quilt, NeoForge, OptiFine и Cleanroom. Устанавливайте моды в один клик.",
+            "faq.q2": "Можно ли играть оффлайн?",
+            "faq.a2": "Конечно. PLauncher поддерживает оффлайн-запуск без подключения к интернету.",
+            "faq.q3": "Работает ли с Ely.by?",
+            "faq.a3": "Полностью. Вы можете загружать, просматривать и менять скины прямо в лаунчере.",
+            "faq.q4": "Это открытый проект?",
+            "faq.a4": "Да. Полностью открытый исходный код под лицензией GPL-3.0. Присоединяйтесь к разработке на GitHub.",
+            "footer.desc": "Быстрый и удобный лаунчер для Minecraft.",
+            "footer.product": "Продукт",
+            "footer.community": "Сообщество",
+            "footer.releases": "Релизы",
+            "footer.legal": "Юридическое",
+            "footer.license": "Лицензия GPL-3.0",
+            "footer.disclaimer": "PLauncher не связан с Mojang или Microsoft. Minecraft® — торговая марка Mojang Studios."
+        },
+        en: {
+            "nav.features": "Features",
+            "nav.download": "Download",
+            "nav.faq": "FAQ",
+            "nav.source": "Source Code",
+            "nav.downloadBtn": "Download",
+            "hero.badge": "Fast • Lightweight • Powerful",
+            "hero.title1": "Minecraft",
+            "hero.title2": "reimagined",
+            "hero.description": "A modern Python launcher with mod support, multi-profiles, and Ely.by. Launches in <3 seconds with minimal resource usage.",
+            "hero.downloadWindows": "Download for Windows",
+            "hero.ram": "RAM usage",
+            "hero.launchTime": "launch time",
+            "hero.installerSize": "installer size",
+            "hero.instantLaunch": "Instant Launch",
+            "hero.scroll": "SCROLL",
+            "features.badge": "POWERFUL FEATURES",
+            "features.title": "Everything you need for Minecraft",
+            "features.card1.title": "Multi-profiles",
+            "features.card1.desc": "Fully isolated profiles with separate versions, mods, and settings.",
+            "features.card1.item1": "Forge, Fabric, Quilt, NeoForge",
+            "features.card1.item2": "OptiFine and Cleanroom",
+            "features.card1.item3": "Automatic Java management",
+            "features.card2.title": "Speed & Lightweight",
+            "features.card2.desc": "One of the fastest and most efficient launchers. Launch in seconds with minimal resource consumption.",
+            "features.card2.ram": "max RAM",
+            "features.card3.title": "Multilingual + Ely.by",
+            "features.card3.desc": "Support for Russian, English, Spanish, and Ukrainian. Full skin management via Ely.by.",
+            "download.title": "Ready to launch?",
+            "download.desc": "Download the latest version of PLauncher and start playing in a new way",
+            "download.button": "Download Installer",
+            "faq.title": "Frequently Asked Questions",
+            "faq.q1": "Does PLauncher support mods?",
+            "faq.a1": "Yes! Full support for Forge, Fabric, Quilt, NeoForge, OptiFine, and Cleanroom. Install mods with one click.",
+            "faq.q2": "Can I play offline?",
+            "faq.a2": "Of course. PLauncher supports offline launch without an internet connection.",
+            "faq.q3": "Does it work with Ely.by?",
+            "faq.a3": "Fully. You can upload, view, and change skins directly in the launcher.",
+            "faq.q4": "Is this an open-source project?",
+            "faq.a4": "Yes. Fully open source under the GPL-3.0 license. Join the development on GitHub.",
+            "footer.desc": "A fast and convenient launcher for Minecraft.",
+            "footer.product": "Product",
+            "footer.community": "Community",
+            "footer.releases": "Releases",
+            "footer.legal": "Legal",
+            "footer.license": "GPL-3.0 License",
+            "footer.disclaimer": "PLauncher is not affiliated with Mojang or Microsoft. Minecraft® is a trademark of Mojang Studios."
+        }
+    };
+
+    function detectSystemLanguage() {
+        const lang = navigator.language || navigator.userLanguage;
+        if (lang.startsWith('ru')) return 'ru';
+        return 'en';
+    }
+
+    function setLanguage(lang) {
+        const slider = document.getElementById('langSlider');
+        if (lang === 'en') {
+            slider.classList.add('right');
+        } else {
+            slider.classList.remove('right');
+        }
+
+        document.querySelectorAll('.lang-option').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+
+        document.querySelectorAll('[data-i18n]').forEach(el => {
+            const key = el.dataset.i18n;
+            if (translations[lang] && translations[lang][key]) {
+                el.textContent = translations[lang][key];
+            }
+        });
+
+        document.documentElement.lang = lang;
+        localStorage.setItem('preferredLanguage', lang);
+    }
+
+    function initLanguage() {
+        const savedLang = localStorage.getItem('preferredLanguage');
+        const lang = savedLang || detectSystemLanguage();
+        if (lang === 'en') {
+            document.getElementById('langSlider').classList.add('right');
+        }
+        document.querySelectorAll('.lang-option').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.lang === lang);
+        });
+        setLanguage(lang);
+    }
+
+    initLanguage();
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+            if (this.getAttribute('href').length > 1) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>
